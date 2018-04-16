@@ -4,11 +4,8 @@ import com.jinhuan.hw5.models.Calculate;
 import com.jinhuan.hw5.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import javax.annotation.PostConstruct;
-import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.math.RoundingMode;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
@@ -22,8 +19,11 @@ import java.util.HashMap;
     public void init(){
            hm = userRepository.initDefault();
     }
-    public Calculate initialPostCalculate(String x,String y,String operation,String hash_alg){
-
+    public Calculate initialPostCalculate(Calculate cal){
+        String operation=cal.getOperation();
+        String x=cal.getX();
+        String y=cal.getY();
+        String hash_alg=cal.getHash_alg();
             Calculate c = hm.get(operation);
             if (x != "") {
                 c.setX(x);
@@ -34,8 +34,11 @@ import java.util.HashMap;
             hm.replace(operation,c);
             return calculate(c,operation,hash_alg);
         }
-    public Calculate initialGetCalculate(String x,String y,String operation,String hash_alg){
-
+    public Calculate initialGetCalculate(Calculate cal){
+ String operation=cal.getOperation();
+ String x=cal.getX();
+ String y=cal.getY();
+ String hash_alg=cal.getHash_alg();
         Calculate c = Calculate.create(hm.get(operation));
         if (x != "") {
             c.setX(x);
@@ -59,9 +62,7 @@ import java.util.HashMap;
                     c.setResult(X.subtract(Y) + "");
                     break;
                 case "div":
-                    BigDecimal Xd = new BigDecimal(c.getX());
-                    BigDecimal Yd = new BigDecimal(c.getY());
-                    c.setResult(Xd.divide(Yd,20,RoundingMode.HALF_UP)+ "");
+                    c.setResult(X.divide(Y)+"");
 //                System.out.println((double) Integer.parseInt(c.getX()) / Integer.parseInt(c.getY()) + "");
                     break;
                 case "pow":

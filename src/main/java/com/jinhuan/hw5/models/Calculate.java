@@ -34,7 +34,6 @@ public class Calculate {
 //        newC.setX(c.getX());
 //        newC.setY(c.getY());
 //        newC.setOperation(c.getOperation());
-//
 //        newC.setResult(c.getResult());
         return newC;
     }
