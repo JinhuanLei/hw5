@@ -2,18 +2,51 @@ package com.jinhuan.hw5.services;
 
 import com.jinhuan.hw5.models.Calculate;
 import com.jinhuan.hw5.repositories.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
 
 @Service
     public class UserService {
-
+       @Autowired
         private UserRepository userRepository;
+    HashMap<String, Calculate> hm;
+       @PostConstruct
+    public void init(){
+           hm = userRepository.initDefault();
+    }
+    public Calculate initialPostCalculate(String x,String y,String operation,String hash_alg){
+
+            Calculate c = hm.get(operation);
+            if (x != "") {
+                c.setX(x);
+            }
+            if (y != "") {
+                c.setY(y);
+            }
+            hm.replace(operation,c);
+            return calculate(c,operation,hash_alg);
+        }
+    public Calculate initialGetCalculate(String x,String y,String operation,String hash_alg){
+
+        Calculate c = Calculate.create(hm.get(operation));
+        if (x != "") {
+            c.setX(x);
+        }
+        if (y != "") {
+            c.setY(y);
+        }
+
+        return calculate(c,operation,hash_alg);
+    }
+
         public Calculate calculate(Calculate c,String operation,String hash_alg) {
             BigInteger X = new BigInteger(c.getX());
             BigInteger Y = new BigInteger(c.getY());
