@@ -5,7 +5,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 
-@ResponseStatus(value = HttpStatus.PAYMENT_REQUIRED, reason="Not Integer!")
-public class BadRequestException extends Exception {
-
+@ResponseStatus(value = HttpStatus.PAYMENT_REQUIRED, reason="Can not devide by zero!")
+public class DivideZeroException extends Exception {
 }

@@ -62,6 +62,7 @@ import java.util.HashMap;
                     c.setResult(X.subtract(Y) + "");
                     break;
                 case "div":
+
                     c.setResult(X.divide(Y)+"");
 //                System.out.println((double) Integer.parseInt(c.getX()) / Integer.parseInt(c.getY()) + "");
                     break;

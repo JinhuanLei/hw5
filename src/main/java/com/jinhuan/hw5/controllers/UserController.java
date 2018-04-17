@@ -2,6 +2,7 @@ package com.jinhuan.hw5.controllers;
 
 
 import com.jinhuan.hw5.exceptions.BadRequestException;
+import com.jinhuan.hw5.exceptions.DivideZeroException;
 import com.jinhuan.hw5.models.Calculate;
 import com.jinhuan.hw5.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,12 +29,15 @@ public class UserController {
         return pattern.matcher(str).matches();
     }
     @RequestMapping(value = "/api/v1/{operation}", method = RequestMethod.POST)
-    public Calculate calculateSaveDefault(@PathVariable String operation, String x, String y, @RequestHeader("hash-alg") String hash_alg) throws BadRequestException {
+    public Calculate calculateSaveDefault(@PathVariable String operation, @RequestParam String x, @RequestParam String y, @RequestHeader("hash-alg") String hash_alg) throws BadRequestException, DivideZeroException {
         if (x != "" && !(isInteger(x))) {
             throw new BadRequestException();
         }
         if (y != "" && !isInteger(y)) {
             throw new BadRequestException();
+        }
+        if(operation.equals("div")&&y.equals("0")){
+            throw new DivideZeroException();
         }
         Calculate cal= new Calculate(new Calculate.Builder().x(x).y(y).operation(operation).hash_alg(hash_alg));
         return userService.initialPostCalculate(cal);
@@ -41,12 +45,15 @@ public class UserController {
 
 
     @RequestMapping(value = "/api/v1/{operation}", method = RequestMethod.GET)
-    public Calculate calculateDefault(@PathVariable String operation, @RequestParam String x, @RequestParam String y, @RequestHeader("hash-alg") String hash_alg) throws BadRequestException {
+    public Calculate calculateDefault(@PathVariable String operation, @RequestParam String x, @RequestParam String y, @RequestHeader("hash-alg") String hash_alg) throws BadRequestException, DivideZeroException {
         if (x != "" && !(isInteger(x))) {
             throw new BadRequestException();
         }
         if (y != "" && !isInteger(y)) {
             throw new BadRequestException();
+        }
+        if(operation.equals("div")&&y.equals("0")){
+            throw new DivideZeroException();
         }
         Calculate cal= new Calculate(new Calculate.Builder().x(x).y(y).operation(operation).hash_alg(hash_alg));
 
